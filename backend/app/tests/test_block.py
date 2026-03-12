@@ -2,6 +2,10 @@ from app.core.block import Block
 
 
 def test_block_creation():
+    """
+    Ελέγχει ότι ένα block δημιουργείται σωστά
+    και ότι όλα τα βασικά πεδία του αποθηκεύονται σωστά.
+    """
     block = Block(
         index=1,
         timestamp=123456.0,

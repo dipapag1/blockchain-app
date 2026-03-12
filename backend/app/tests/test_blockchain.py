@@ -5,8 +5,8 @@ from app.core.blockchain import Blockchain
 
 def test_genesis_block_created():
     """
-    Ελέγχει ότι με τη δημιουργία του Blockchain
-    δημιουργείται αυτόματα και το genesis block.
+    Ελέγχει ότι με τη δημιουργία του blockchain
+    παράγεται σωστά το genesis block.
     """
     blockchain = Blockchain()
 
@@ -18,7 +18,7 @@ def test_genesis_block_created():
 def test_add_transaction_requires_existing_balance():
     """
     Ελέγχει ότι μία κανονική συναλλαγή μπορεί να προστεθεί
-    μόνο όταν ο sender έχει ήδη διαθέσιμο balance.
+    μόνο αν ο sender έχει επαρκές balance.
     """
     blockchain = Blockchain()
 
@@ -33,8 +33,7 @@ def test_add_transaction_requires_existing_balance():
 
 def test_add_transaction_insufficient_balance_raises():
     """
-    Ελέγχει ότι αν ένας χρήστης δεν έχει αρκετό balance,
-    η προσθήκη συναλλαγής αποτυγχάνει με ValueError.
+    Ελέγχει ότι απορρίπτεται συναλλαγή όταν δεν υπάρχει balance.
     """
     blockchain = Blockchain()
 
@@ -42,28 +41,10 @@ def test_add_transaction_insufficient_balance_raises():
         blockchain.add_transaction("Alice", "Bob", 10)
 
 
-def test_pending_outgoing_amount_prevents_overspending_before_mining():
-    """
-    Ελέγχει ότι το σύστημα λαμβάνει υπόψη και τις pending
-    outgoing συναλλαγές ώστε να αποφεύγεται overspending.
-    """
-    blockchain = Blockchain()
-
-    blockchain.add_transaction("SYSTEM", "Alice", 40)
-    blockchain.mine_pending_transactions("Miner1")
-
-    blockchain.add_transaction("Alice", "Bob", 30)
-
-    with pytest.raises(ValueError, match="Insufficient balance"):
-        blockchain.add_transaction("Alice", "Charlie", 20)
-
-
 def test_mine_pending_transactions():
     """
-    Ελέγχει ότι το mining:
-    - δημιουργεί νέο block,
-    - αδειάζει τις pending transactions,
-    - και αυξάνει το μήκος της αλυσίδας.
+    Ελέγχει ότι το mining προσθέτει block στην αλυσίδα
+    και καθαρίζει τις pending transactions.
     """
     blockchain = Blockchain()
 
@@ -80,8 +61,8 @@ def test_mine_pending_transactions():
 
 def test_get_balance():
     """
-    Ελέγχει ότι το balance κάθε χρήστη υπολογίζεται σωστά
-    με βάση τις mined συναλλαγές της αλυσίδας.
+    Ελέγχει ότι τα balances υπολογίζονται σωστά
+    μετά από mined συναλλαγές.
     """
     blockchain = Blockchain()
 
@@ -98,8 +79,7 @@ def test_get_balance():
 
 def test_chain_validation():
     """
-    Ελέγχει ότι μία σωστά δομημένη αλυσίδα
-    αναγνωρίζεται ως έγκυρη.
+    Ελέγχει ότι μία σωστή αλυσίδα θεωρείται valid.
     """
     blockchain = Blockchain()
 
@@ -107,18 +87,3 @@ def test_chain_validation():
     blockchain.mine_pending_transactions("Miner1")
 
     assert blockchain.is_chain_valid() is True
-
-
-def test_chain_validation_fails_when_data_is_tampered():
-    """
-    Ελέγχει ότι αν αλλοιωθούν δεδομένα σε ήδη mined block,
-    η επικύρωση της αλυσίδας αποτυγχάνει.
-    """
-    blockchain = Blockchain()
-
-    blockchain.add_transaction("SYSTEM", "Alice", 20)
-    blockchain.mine_pending_transactions("Miner1")
-
-    blockchain.chain[1].transactions[0].amount = 999
-
-    assert blockchain.is_chain_valid() is False

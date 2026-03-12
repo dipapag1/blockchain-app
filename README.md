@@ -24,6 +24,11 @@
 - Auto-generated API documentation
 
 ---
+## Developer Documentation
+
+Για οδηγίες εγκατάστασης και συνεργασίας δείτε:
+
+docs/GUIDE.md
 
 ## Project Structure
 
@@ -58,10 +63,3 @@ backend/
 ├── requirements.txt
 ├── test_core.py
 └── README.md
-
-
-## Developer Documentation
-
-Για οδηγίες εγκατάστασης και συνεργασίας δείτε:
-
-docs/GUIDE.md

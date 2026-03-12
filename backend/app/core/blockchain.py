@@ -217,3 +217,33 @@ class Blockchain:
                 return False
 
         return True
+    
+    def add_transaction(self, sender: str, receiver: str, amount: float) -> Transaction:
+    """
+    Προσθέτει μία νέα συναλλαγή στις pending transactions.
+
+    Args:
+        sender: Ο αποστολέας.
+        receiver: Ο παραλήπτης.
+        amount: Το ποσό.
+
+    Returns:
+        Transaction: Η συναλλαγή που προστέθηκε.
+
+    Raises:
+        ValueError: Αν τα δεδομένα είναι μη έγκυρα ή αν το υπόλοιπο δεν επαρκεί.
+    """
+    if not sender or not receiver:
+        raise ValueError("Sender and receiver are required.")
+
+    if amount <= 0:
+        raise ValueError("Amount must be greater than zero.")
+
+    if sender != "SYSTEM":
+        sender_balance = self.get_balance(sender)
+        if sender_balance < amount:
+            raise ValueError("Insufficient balance.")
+
+    transaction = Transaction(sender=sender, receiver=receiver, amount=amount)
+    self.pending_transactions.append(transaction)
+    return transaction

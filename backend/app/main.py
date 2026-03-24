@@ -1,7 +1,12 @@
-<<<<<<< HEAD
-=======
+ frontend
+ HEAD
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from fastapi import FastAPI
+
+ main
 from app.api.routes import router
 
 
@@ -15,6 +20,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
+ frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -26,6 +32,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+ main
 
 @app.get("/", tags=["Health"])
 def root() -> dict:
@@ -44,5 +52,9 @@ def root() -> dict:
     }
 
 
+frontend
 app.include_router(router)
->>>>>>> 98d54ff (Apothikeuse to bc project)
+ 98d54ff (Apothikeuse to bc project)
+
+app.include_router(router)
+ main
